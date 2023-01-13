@@ -46,8 +46,9 @@ for a = 1:length(sample_data.s)
 end
 
 if numel(model_time)>1 || numel(threshold_frac)>1
-    model_time = mean(model_time);
-    threshold_frac = mean(threshold_frac);
+    model_time = model_time(1);
+    threshold_frac = threshold_frac(1);
+    warning('more than one bestfit scenario')
 end
 
 
