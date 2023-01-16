@@ -41,9 +41,9 @@
 % 24. Sample 14-C exposure 1 sigma uncertainty (external; years)
 % 25. Scaling model used (i.e. 'DE','DU','LI','ST','LM','LSD'/'SA','LSDn'/'SF')
 %
-% Written by Richard Selwyn Jones, Durham University
-% richard.s.jones@durham.ac.uk
-% Part of the CRYONUS tools suite, which is built on versions of 
+% Written by Richard Selwyn Jones, Monash University
+% richard.s.jones@monash.edu
+% Part of the iceTEA tools suite, which is built on versions of 
 % CRONUS-Earth and CRONUScalc code.
 %
 %
@@ -114,7 +114,7 @@ function sample_data = get_data_1014(input_name)
   if NN(1)
       N = in_data(logical_10,9:10);
       in_data_N = in_data(logical_10,:);
-      sorted_10 = sort_data(in_data_N,N,names);
+      sorted_10 = sort_data_1014(in_data_N,N,names);
   else
       sorted_10 = [];
   end

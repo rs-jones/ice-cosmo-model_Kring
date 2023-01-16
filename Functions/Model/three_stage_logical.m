@@ -58,21 +58,22 @@ function exposed_or_not = three_stage_logical(recent_exp,bur_dur,model_time,mode
   % Determine initial exposure time
   init_exp_dur = EBE_time-buried_dur-recent_exp_dur;
   
-  if init_exp_dur<1
-      init_exp_dur = 1;
-      EBE_time = init_exp_dur+buried_dur+recent_exp_dur;
-  end
-  time = fliplr(0:model_interval:EBE_time);
-  
   
   % Compute logical
-  init_exposure = ones(1,init_exp_dur/model_interval);
+  if init_exp_dur<1 % If burial period duration is greater than total time, include no pre-exposure
+      init_exp_dur = model_interval;
+      EBE_time = init_exp_dur+buried_dur+recent_exp_dur;
+      init_exposure = zeros(1,init_exp_dur/model_interval);
+  else
+      init_exposure = ones(1,init_exp_dur/model_interval);
+  end
   burial = zeros(1,buried_dur/model_interval);
   recent_exposure = ones(1,recent_exp_dur/model_interval);
   exposed_or_not.logical = logical([init_exposure burial recent_exposure 1]);
   
   
   % Append time and interval
+  time = fliplr(0:model_interval:EBE_time);
   exposed_or_not.time = time;
   exposed_or_not.values = [init_exposure burial recent_exposure 1];
   exposed_or_not.interval_time = zeros(1,numel(exposed_or_not.logical)) + model_interval;

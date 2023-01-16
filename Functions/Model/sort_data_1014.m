@@ -16,7 +16,7 @@
 %
 % Written by Richard Selwyn Jones, Durham University
 % richard.s.jones@durham.ac.uk
-% Part of the CRYONUS tools suite, which is built on versions of 
+% Part of the iceTEA tools suite, which is built on versions of 
 % CRONUS-Earth and CRONUScalc code.
 %
 %
