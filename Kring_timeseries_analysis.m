@@ -66,8 +66,7 @@ model_interval = 1000; % OPTIONALLY set model interval (10, 100 or 1000 years;
 threshold_frac_bnds = [0.2 0.8];    % Threshold fraction for time series driver (lower and upper)
 model_time_bnds = [20000 100000];   % Total model time (lower and upper)
 burial_frac_bnds = [0 .9];          % Fraction of exposure period that a 
-                                    % sample could be buried (multiples of
-                                    % 0.05) (lower and upper)
+                                    % sample could be buried (lower and upper)
 n_iterations = 1000;                % Number of model iterations
 
 

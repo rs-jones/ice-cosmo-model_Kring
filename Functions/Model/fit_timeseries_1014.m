@@ -108,19 +108,27 @@ function out = fit_timeseries_1014(sample_data,driver,threshold_frac_bnds,model_
       exposed_or_not = time_series_logical(time_series,threshold_frac,model_time,data_use,model_interval);
       
       
-      % Determine burial fractions for each sample depending on
-      % relative position
       if ~isempty(burial_frac_bnds)
-          burial_frac_int = 0.05; % Interval for burial fractions within given range
-          burial_fracs = burial_frac_bnds(1):burial_frac_int:burial_frac_bnds(2)+burial_frac_int; % Burial ractions
-          
-          [~,pos_idx] = sort(sample_data.position,'descend'); % Get sample position order
-          sample_arr = 1:length(sample_data.position); sample_arr_rev = fliplr(sample_arr);
-          for c = sample_arr % Create array for each sample, staggered by position
-              this_pos_idx = pos_idx(c);
-              sample_burial_fracs(:,this_pos_idx) = burial_fracs(sample_arr(c):end-sample_arr_rev(c));
+%           % Determine burial fractions for each sample depending on
+%           % elevation order
+%           burial_frac_int = 0.05; % Interval for burial fractions within given range
+%           burial_fracs = burial_frac_bnds(1):burial_frac_int:burial_frac_bnds(2)+burial_frac_int; % Burial ractions
+%           
+%           [~,pos_idx] = sort(sample_data.position,'descend'); % Get sample position order
+%           sample_arr = 1:length(sample_data.position); sample_arr_rev = fliplr(sample_arr);
+%           for c = sample_arr % Create array for each sample, staggered by position
+%               this_pos_idx = pos_idx(c);
+%               sample_burial_fracs(:,this_pos_idx) = burial_fracs(sample_arr(c):end-sample_arr_rev(c));
+%           end
+                              
+          % Determine burial fractions for each sample depending on
+          % relative elevation difference
+          n_bur_frac = 10; % Set number of iterations to test burial fraction
+          bur_frac_arr = linspace(burial_frac_bnds(1),burial_frac_bnds(2),n_bur_frac);
+          pos_scaled = rescale(sample_data.position);
+          for c = 1:length(bur_frac_arr)
+              sample_burial_fracs(c,:) = bur_frac_arr(c)*pos_scaled;
           end
-          
       end
       
       
@@ -157,17 +165,20 @@ function out = fit_timeseries_1014(sample_data,driver,threshold_frac_bnds,model_
                   
               end
                             
+              % Get the bestfit burial fraction
               if numel(unique(this_burfrac_misfit))==numel(this_burfrac_misfit)
                   burfrac_min_misfit = min(this_burfrac_misfit);
                   this_s_predN = burfrac_predN(burfrac_min_misfit==this_burfrac_misfit);
                   this_s_bestfit_burfrac = sample_burial_fracs((burfrac_min_misfit==this_burfrac_misfit),c);
-                  
-                  this_scenario_predN{c} = this_s_predN{1};
-                  this_scenario_misfit(c) = burfrac_min_misfit;
-                  this_scenario_burfrac(c) = this_s_bestfit_burfrac;
+              else % Use the first result if no unique bestfit
+                  burfrac_min_misfit = min(this_burfrac_misfit);
+                  this_s_predN = burfrac_predN(1);
+                  this_s_bestfit_burfrac = sample_burial_fracs(1,c);
               end
+              this_scenario_predN{c} = this_s_predN{1};
+              this_scenario_misfit(c) = burfrac_min_misfit;
+              this_scenario_burfrac(c) = this_s_bestfit_burfrac;
           end
-          
       end
       scenario_misfits(b) = mean(this_scenario_misfit,'omitnan');
       if ~isempty(burial_frac_bnds)
@@ -181,10 +192,6 @@ function out = fit_timeseries_1014(sample_data,driver,threshold_frac_bnds,model_
           end
           plot_Scenario(exposed_or_not,sample_data,this_scenario_predN,plot_fig)
       end
-      
-%       disp(['Mean misfit of  ' int2str(mean(this_scenario_misfit)) '  from scenario:']);
-%       disp(['threshold_frac  ' sprintf('%0.2f',threshold_frac) ]);
-%       disp(['model_time (years)  ' int2str(model_time) ]);
       
   end
   

@@ -50,8 +50,7 @@ scaling_model = 'ST'; % Scaling model - time-independent scaling (e.g. Stone) on
 model_time_bnds = [50000 300000];  % Total model time (years; lower and upper)
 bur_dur_bnds = [10 200000];        % Duration of burial (years; lower and upper)
 burial_frac_bnds = [0 .9];         % Fraction of exposure period that a 
-                                   % sample could be buried (multiples of
-                                   % 0.05) (lower and upper)
+                                   % sample could be buried (lower and upper)
 model_interval = [];               % Optionally set model interval used in 
                                    % calculations - 10, 100 or 1000 years 
                                    % (default is 1000)
