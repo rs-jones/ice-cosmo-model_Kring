@@ -235,7 +235,7 @@ function sample_data = get_data_1014(input_name)
   
   % Combine necessary data for CronusCalc
   sample_data.CC.Be10 = [sorted_data(:,[1:4,6:8]),e_rate,sorted_data(:,9),zeros(size(sorted_data(:,9))),inh10,inh14,init_L,top_depth_gcm2',sorted_data(:,17)];
-  sample_data.CC.C14 = [sorted_data(:,[1:4,6:8]),e_rate,sorted_data(:,9),inh14,init_L,top_depth_gcm2',sorted_data(:,17)];
+  sample_data.CC.C14 = [sorted_data(:,[1:4,6:8]),e_rate,sorted_data(:,11),inh14,init_L,top_depth_gcm2',sorted_data(:,17)];
   
   % Determine atmospheric pressure (if unknown)
   sample_data.CC.Be10 = atm_pressure(sorted_data(:,1),sorted_data(:,2),sample_data.CC.Be10);

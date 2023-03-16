@@ -1,11 +1,11 @@
-%% ANALYSE MULTIPLE NUCLIDE CONCENTRATIONS FROM SURFACE SAMPLES USING A THREE-STAGE HISTORY
+%% ANALYSE MULTIPLE NUCLIDE CONCENTRATIONS FROM SURFACE SAMPLES USING DYNAMIC PERIODS OF EXPOSURE AND BURIAL
 %
 % Finds the best fit exposure/burial scenario to explain the measured
 % nuclide concentations. Plots the corresponding history, and predicted
 % concentrations on a two-isotope diagram.
 %
-% Uses the floating parameters of total exposure-burial time and time 
-% buried (in years), to compute a three-stage (exposure-burial-exposure) 
+% Uses the floating parameters of total exposure-burial time and exposure
+% period duration (in years) to compute a multi-stage exposure-burial 
 % history.
 %
 % To be used with nuclides measured in surface samples (e.g. bedrock, 
@@ -58,13 +58,14 @@ sample_data = get_pars_1014(sample_data,scaling_model);
 %% Determine Best Fit Scenarios
 
 % SET model inputs
-modeltime_initial = 100000;        % Total model time (years, starting value)
-burdur_initial = 50000;            % Duration of burial (years; starting value)
+expo_mids = [25,28,33,35,44,53,67,86,92,104,165]; % Mid-points of exposure periods (ka)
+modeltime_initial = 120000;        % Total model time (years, starting value)
+expodur_initial = 2000;            % Duration of each exposure period (years; starting value)
 burialfrac_bnds = [0 .9];          % Fraction of exposure period that a 
                                    % sample could be buried (lower and upper)
 model_interval = [];               % Optionally set model interval used in 
-                                   % calculations - 10, 100 or 1000 years 
-                                   % (default is 1000)
+                                       % calculations - 10, 100 or 1000 years 
+                                       % (default is 1000)
 misfit_type = 'all';               % Set method of deriving misfit - 'all','minmax','minBe','maxBe','minC','maxC'
                                        % 'all' to use mean of all samples
                                        % 'minmax' to use the mean of the min and max sample misfits
@@ -83,11 +84,11 @@ fig_h = plot_concs_1014(sample_data,2,1,expo_intervals,bur_intervals,x_lim,y_lim
 
 
 % Find best fit for each sample
-best_fits = run_3stage_1014(sample_data,modeltime_initial,burdur_initial,misfit_type,model_interval,fig_h,burialfrac_bnds);
+best_fits = run_dynamicPeriods_1014(sample_data,expo_mids,modeltime_initial,expodur_initial,misfit_type,model_interval,fig_h,burialfrac_bnds);
 
 
 % Export bestfit results
-save_name = 'MtKring_3stage_bestfit'; % Specify file name
+save_name = 'MtKring_periods_bestfit'; % Specify file name
 %save(strcat(save_name,'_output.mat'),'best_fits'); % Save data
 saveas(gcf,strcat(save_name,'.png'),'png'); % Save figure
 
