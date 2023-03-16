@@ -59,8 +59,8 @@ sample_data = get_pars_1014(sample_data,scaling_model);
 
 % SET model inputs
 expo_mids = [25,28,33,35,44,53,67,86,92,104,165]; % Mid-points of exposure periods (ka before present)
-modeltime_initial = 120000;        % Total model time (years, starting value)
-expodur_initial = 2000;            % Duration of each exposure period (years before present; starting value)
+modeltime_initial = 120000;        % Total model time (years before present, starting value)
+expodur_initial = 2000;            % Duration of each exposure period (years; starting value)
 burialfrac_bnds = [0 .9];          % Fraction of exposure period that a sample could be buried (lower and upper)
 startexpo_initial = [];            % Optionally set exposure duration at the start of the model, prior to the dynamic periods (years; starting value), leave empty to ignore
 model_interval = [];               % Optionally set model interval used in calculations - 10, 100 or 1000 years (default is 1000)
@@ -71,8 +71,8 @@ misfit_type = 'all';               % Set method of deriving misfit - 'all','minm
 
                                          
 % Generate figure of sample concentrations and plot handles
-expo_intervals = [25,75,50,100]; % Specify exposure intervals to show on plot
-bur_intervals = [10,20]; % Specify burial intervals to show on plot
+expo_intervals = [25,75,50,100]; % Specify exposure intervals to show on plot (ka)
+bur_intervals = [10,20]; % Specify burial intervals to show on plot (ka)
 x_lim = [0,1.2e5]; % Specify 10Be axis limits
 y_lim = [0.012,1]; % Specify 14C/10Be axis limits
 add_names = 0; % Add sample names to plot? (0=no, 1=yes)

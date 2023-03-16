@@ -103,7 +103,7 @@ function out = run_3stage_1014(sample_data,modeltime_initial,burdur_initial,misf
   disp('');
   disp('Best fit scenario:');
   disp(['bur_dur (years)  ' int2str(optX(2)) ]);
-  disp(['model_time (years)  ' int2str(optX(1)) ]);
+  disp(['model_time (years before present)  ' int2str(optX(1)) ]);
   
   
   % Export

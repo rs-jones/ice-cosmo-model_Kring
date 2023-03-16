@@ -80,19 +80,19 @@ driver.model_interval = model_interval;
 
 % SET model bounds
 threshold_frac_bnds = [0.2 0.8];    % Threshold fraction for time series driver (lower and upper)
-model_time_bnds = [20000 100000];   % Total model time (lower and upper)
+model_time_bnds = [20000 100000];   % Total model time (years before present; lower and upper)
 burial_frac_bnds = [0 .9];          % Fraction of exposure period that a sample could be buried (lower and upper)
 n_iterations = 1000;                % Number of model iterations
 
 
 % Generate figure of sample concentrations and plot handles
-expo_intervals = [25,75,50,100]; % Specify exposure intervals to show on plot
-bur_intervals = [10,20]; % Specify burial intervals to show on plot
+expo_intervals = [25,75,50,100]; % Specify exposure intervals to show on plot (ka)
+bur_intervals = [10,20]; % Specify burial intervals to show on plot (ka)
 x_lim = [0,1.2e5]; % Specify 10Be axis limits
 y_lim = [0.012,1]; % Specify 14C/10Be axis limits
 add_names = 0; % Add sample names to plot? (0=no, 1=yes)
 
-close all; % Close existing figure, if open
+close; % Close existing figure, if open
 fig_h = plot_concs_1014(sample_data,2,1,expo_intervals,bur_intervals,x_lim,y_lim,add_names);
 
 

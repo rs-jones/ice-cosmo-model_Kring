@@ -1,6 +1,6 @@
 %
-% out = fit_timeseries_1014(sample_data,driver,threshold_frac_bnds,model_time_bnds,n_iterations)
-% out = fit_timeseries_1014(sample_data,driver,threshold_frac_bnds,model_time_bnds,n_iterations,plot_fig)
+% out = run_timeseries_1014(sample_data,driver,threshold_frac_bnds,model_time_bnds,n_iterations)
+% out = run_timeseries_1014(sample_data,driver,threshold_frac_bnds,model_time_bnds,n_iterations,plot_fig)
 %
 % Computes the predicted nuclide concentration for each sample and nuclide,
 % based on the given time-series driver and floating parameters. Then 
@@ -34,11 +34,11 @@
 %
 %%
 
-function out = fit_timeseries_1014(sample_data,driver,threshold_frac_bnds,model_time_bnds,n_iterations,plot_fig,burial_frac_bnds)
+function out = run_timeseries_1014(sample_data,driver,threshold_frac_bnds,model_time_bnds,n_iterations,plot_fig,burial_frac_bnds)
 
   % Check inputs
   if (nargin < 5 || nargin > 7)
-      error('fit_timeseries_1014 has wrong number of inputs!');
+      error('run_timeseries_1014 has wrong number of inputs!');
   end
   if (nargin < 6)
       plot_fig = [];
@@ -213,7 +213,7 @@ function out = fit_timeseries_1014(sample_data,driver,threshold_frac_bnds,model_
   disp('');
   disp('Best fit scenario:');
   disp(['threshold_frac  ' sprintf('%0.2f',bestfit_threshold_frac(1)) ]);
-  disp(['model_time (years)  ' int2str(bestfit_model_time(1)) ]);
+  disp(['model_time (years before present)  ' int2str(bestfit_model_time(1)) ]);
   
   % Export
   out.misfit_min = min(scenario_misfits);
