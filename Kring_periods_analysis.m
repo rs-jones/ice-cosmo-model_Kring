@@ -58,14 +58,12 @@ sample_data = get_pars_1014(sample_data,scaling_model);
 %% Determine Best Fit Scenarios
 
 % SET model inputs
-expo_mids = [25,28,33,35,44,53,67,86,92,104,165]; % Mid-points of exposure periods (ka)
+expo_mids = [25,28,33,35,44,53,67,86,92,104,165]; % Mid-points of exposure periods (ka before present)
 modeltime_initial = 120000;        % Total model time (years, starting value)
-expodur_initial = 2000;            % Duration of each exposure period (years; starting value)
-burialfrac_bnds = [0 .9];          % Fraction of exposure period that a 
-                                   % sample could be buried (lower and upper)
-model_interval = [];               % Optionally set model interval used in 
-                                       % calculations - 10, 100 or 1000 years 
-                                       % (default is 1000)
+expodur_initial = 2000;            % Duration of each exposure period (years before present; starting value)
+burialfrac_bnds = [0 .9];          % Fraction of exposure period that a sample could be buried (lower and upper)
+startexpo_initial = [];            % Optionally set exposure duration at the start of the model, prior to the dynamic periods (years; starting value), leave empty to ignore
+model_interval = [];               % Optionally set model interval used in calculations - 10, 100 or 1000 years (default is 1000)
 misfit_type = 'all';               % Set method of deriving misfit - 'all','minmax','minBe','maxBe','minC','maxC'
                                        % 'all' to use mean of all samples
                                        % 'minmax' to use the mean of the min and max sample misfits
@@ -84,7 +82,7 @@ fig_h = plot_concs_1014(sample_data,2,1,expo_intervals,bur_intervals,x_lim,y_lim
 
 
 % Find best fit for each sample
-best_fits = run_dynamicPeriods_1014(sample_data,expo_mids,modeltime_initial,expodur_initial,misfit_type,model_interval,fig_h,burialfrac_bnds);
+best_fits = run_dynamicPeriods_1014(sample_data,expo_mids,modeltime_initial,expodur_initial,misfit_type,model_interval,fig_h,startexpo_initial,burialfrac_bnds);
 
 
 % Export bestfit results

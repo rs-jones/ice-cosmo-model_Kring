@@ -5,6 +5,11 @@ function misfit = fit_opt_dynamicPeriods_1014(X,sample_data,expo_mids,model_inte
 % Unpack
 model_time = X(1)/1000;
 expo_dur = X(2)/1000;
+if length(X)>2
+    start_exp = X(3)/1000;
+else
+    start_exp = [];
+end
 
 data = sample_data.org_data;
 ages14 = sample_data.ages14;
@@ -12,7 +17,7 @@ ages14 = sample_data.ages14;
 
 % Generate exposure and burial periods
 recent_exp = mean(ages14)/1000;
-exposed_or_not = var_periods_logical(model_time,expo_mids,expo_dur,'exposure',[],recent_exp,model_interval);
+exposed_or_not = var_periods_logical(model_time,expo_mids,expo_dur,'exposure',start_exp,recent_exp,model_interval);
         
 
 if ~isempty(burialfrac_bnds)

@@ -1,6 +1,6 @@
 %
 % out = run_dynamicPeriods_1014(sample_data,expo_mids,modeltime_initial,expodur_initial,misfit_type)
-% out = run_dynamicPeriods_1014(sample_data,expo_mids,modeltime_initial,expodur_initial,misfit_type,model_interval,plot_fig,burialfrac_bnds)
+% out = run_dynamicPeriods_1014(sample_data,expo_mids,modeltime_initial,expodur_initial,misfit_type,model_interval,plot_fig,startexpo_initial,burialfrac_bnds)
 %
 % Computes the predicted nuclide concentration for each sample and nuclide,
 % based on a multi-stage exposure-burial history, using floating
@@ -15,8 +15,8 @@
 % modeltime_initial should be a starting value of the total model time 
 % (years before present), used for dynamic periods driver.
 %
-% expodur_initial should be the starting value of the burial duration, used 
-% for dynamic periods driver.
+% expodur_initial should be the starting value of the exposure duration, 
+% used for dynamic periods driver.
 %
 % misfit_type specifies the method of deriving misfit ('all','minmax',
 % 'minBe','maxBe','minC','maxC'). For example, 'all' uses mean of all 
@@ -32,7 +32,11 @@
 % and corresponding predicted nuclide concentrations are plotted for each
 % modelled scenario.
 %
-% burial_frac_bnds is an optional input, specifying the fraction of 
+% startexpo_initial is an optional input, which should be the starting
+% value of exposure duration at the start of the model, prior to the
+% dynamic periods.
+%
+% burial_frac_bnds is an optional input specifying the fraction of 
 % exposure period that a sample could be buried (multiples of 0.05) 
 % [min max], used for the dynamic periods driver.
 %
@@ -42,10 +46,10 @@
 %
 %%
 
-function out = run_dynamicPeriods_1014(sample_data,expo_mids,modeltime_initial,expodur_initial,misfit_type,model_interval,plot_fig,burialfrac_bnds)
+function out = run_dynamicPeriods_1014(sample_data,expo_mids,modeltime_initial,expodur_initial,misfit_type,model_interval,plot_fig,startexpo_initial,burialfrac_bnds)
 
   % Check inputs
-  if (nargin < 5 || nargin > 8)
+  if (nargin < 5 || nargin > 9)
       error('run_dynamicPeriods_1014 has wrong number of inputs!');
   end
   if (nargin < 6) || isempty(model_interval)
@@ -58,9 +62,12 @@ function out = run_dynamicPeriods_1014(sample_data,expo_mids,modeltime_initial,e
       plot_fig = [];
   end
   if (nargin < 8)
+      startexpo_initial = [];
+  end
+  if (nargin < 9)
       burialfrac_bnds = [];
   end
-
+  
   
   % Re-organise data for each sample
   sample_data.logical_1014 = any(sample_data.logical_10 & sample_data.logical_14); 
@@ -101,18 +108,35 @@ function out = run_dynamicPeriods_1014(sample_data,expo_mids,modeltime_initial,e
   % Find bestfit scenario and export result
   disp('Finding best fit scenario...');
   
-  [optX,fmin] = fminsearch(@(X) fit_opt_dynamicPeriods_1014(X,sample_data,expo_mids,model_interval,misfit_type,plot_fig,burialfrac_bnds),[modeltime_initial,expodur_initial],opts);
+  if isempty(startexpo_initial)
+      
+      [optX,fmin] = fminsearch(@(X) fit_opt_dynamicPeriods_1014(X,sample_data,expo_mids,model_interval,misfit_type,plot_fig,burialfrac_bnds),[modeltime_initial,expodur_initial],opts);
+      
+      disp('');
+      disp('Best fit scenario:');
+      disp(['expo_dur (years)  ' int2str(optX(2)) ]);
+      disp(['model_time (years before present)  ' int2str(optX(1)) ]);
+      
+      out.bestfit_expo_dur = optX(2);
+      out.bestfit_model_time = optX(1);
   
-  disp('');
-  disp('Best fit scenario:');
-  disp(['expo_dur (years)  ' int2str(optX(2)) ]);
-  disp(['model_time (years)  ' int2str(optX(1)) ]);
+  else
+      
+      [optX,fmin] = fminsearch(@(X) fit_opt_dynamicPeriods_1014(X,sample_data,expo_mids,model_interval,misfit_type,plot_fig,burialfrac_bnds),[modeltime_initial,expodur_initial,startexpo_initial],opts);
+      
+      disp('');
+      disp('Best fit scenario:');
+      disp(['expo_dur (years)  ' int2str(optX(2)) ]);
+      disp(['model_time (years before present)  ' int2str(optX(1)) ]);
+      disp(['start_expo (years)  ' int2str(optX(3)) ]);
+            
+      out.bestfit_expo_dur = optX(2);
+      out.bestfit_model_time = optX(1);
+      out.bestfit_start_expo = optX(3);
+      
+  end
   
-  
-  % Export
   out.misfit_min = fmin;
-  out.bestfit_expo_dur = optX(2);
-  out.bestfit_model_time = optX(1);
   
   % Calculate reduced chi-squared from bestfit
   if length(sample_data.s) > 2

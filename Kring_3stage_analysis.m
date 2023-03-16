@@ -60,11 +60,8 @@ sample_data = get_pars_1014(sample_data,scaling_model);
 % SET model inputs
 modeltime_initial = 100000;        % Total model time (years, starting value)
 burdur_initial = 50000;            % Duration of burial (years; starting value)
-burialfrac_bnds = [0 .9];          % Fraction of exposure period that a 
-                                   % sample could be buried (lower and upper)
-model_interval = [];               % Optionally set model interval used in 
-                                   % calculations - 10, 100 or 1000 years 
-                                   % (default is 1000)
+burialfrac_bnds = [0 .9];          % Fraction of exposure period that a sample could be buried (lower and upper)
+model_interval = [];               % Optionally set model interval used in calculations - 10, 100 or 1000 years (default is 1000)
 misfit_type = 'all';               % Set method of deriving misfit - 'all','minmax','minBe','maxBe','minC','maxC'
                                        % 'all' to use mean of all samples
                                        % 'minmax' to use the mean of the min and max sample misfits
